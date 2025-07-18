@@ -1,28 +1,14 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { 
-  Sparkles, 
   Search, 
   FileText, 
   Share2, 
   Target, 
-  ChevronRight, 
-  Upload, 
-  Globe, 
-  TrendingUp,
   Lightbulb,
   Edit3,
   BarChart3,
-  Clock,
-  CheckCircle,
-  AlertCircle,
   Loader2,
-  X,
-  Plus,
-  Trash2,
-  Eye,
-  Download,
-  RefreshCw
 } from 'lucide-react';
 import StepIndicator from '../components/StepIndicator';
 import BusinessInfoStep from '../components/BuisnessInfoStep';
@@ -32,6 +18,7 @@ import BlueprintStep from '../components/BluePrintStep';
 import ContentStep from '../components/ContetnStep';
 import ScoreStep from '../components/ScoreStep';
 import { ContentBlueprint, ContentType, FormData, GeneratedContent, Keyword, Topic } from '@/types/types';
+import axios from 'axios';
 
 export default function Home() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -108,20 +95,33 @@ export default function Home() {
     setIsLoading(true);
     setLoadingMessage('Analyzing your business and competitors...');
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const mockKeywords: Keyword[] = [
-      { id: '1', keyword: 'digital marketing', volume: 12000, difficulty: 65, score: 85 },
-      { id: '2', keyword: 'content strategy', volume: 8500, difficulty: 45, score: 90 },
-      { id: '3', keyword: 'SEO optimization', volume: 15000, difficulty: 70, score: 80 },
-      { id: '4', keyword: 'social media marketing', volume: 20000, difficulty: 60, score: 88 },
-      { id: '5', keyword: 'brand awareness', volume: 9500, difficulty: 55, score: 82 }
-    ];
-    
-    setKeywords(mockKeywords);
-    setIsLoading(false);
-    setCurrentStep(2);
+    // const mockKeywords: Keyword[] = [
+    //   { id: '1', keyword: 'digital marketing', volume: 12000, difficulty: 65, score: 85 },
+    //   { id: '2', keyword: 'content strategy', volume: 8500, difficulty: 45, score: 90 },
+    //   { id: '3', keyword: 'SEO optimization', volume: 15000, difficulty: 70, score: 80 },
+    //   { id: '4', keyword: 'social media marketing', volume: 20000, difficulty: 60, score: 88 },
+    //   { id: '5', keyword: 'brand awareness', volume: 9500, difficulty: 55, score: 82 }
+    // ];
+    const apiPayload = {
+      businessName: formData.businessName,
+      websiteUrl: formData.websiteUrl,
+      competitorUrls: formData.competitorUrls,
+      language: formData.language,
+      contentTypes: formData.contentTypes,
+      uploadedFile: formData.uploadedFile
+    }
+    console.log('generateKeywords', apiPayload);    
+
+    try {
+      const response = await axios.post(`http://localhost:8080/api/generate-content`, apiPayload)
+      console.log('response', response)
+      setIsLoading(false);
+      setCurrentStep(2);
+    }catch(err) {
+      console.error(err)
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const generateTopics = async () => {
