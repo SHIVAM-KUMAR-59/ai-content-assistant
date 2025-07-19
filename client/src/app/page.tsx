@@ -38,6 +38,7 @@ export default function Home() {
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
+  const NEXT_PUBLIC_BASE_API_URL="http://localhost:8080"
 
   const steps = [
     { id: 1, title: 'Business Info', icon: Target },
@@ -95,13 +96,6 @@ export default function Home() {
     setIsLoading(true);
     setLoadingMessage('Analyzing your business and competitors...');
     
-    // const mockKeywords: Keyword[] = [
-    //   { id: '1', keyword: 'digital marketing', volume: 12000, difficulty: 65, score: 85 },
-    //   { id: '2', keyword: 'content strategy', volume: 8500, difficulty: 45, score: 90 },
-    //   { id: '3', keyword: 'SEO optimization', volume: 15000, difficulty: 70, score: 80 },
-    //   { id: '4', keyword: 'social media marketing', volume: 20000, difficulty: 60, score: 88 },
-    //   { id: '5', keyword: 'brand awareness', volume: 9500, difficulty: 55, score: 82 }
-    // ];
     const apiPayload = {
       businessName: formData.businessName,
       websiteUrl: formData.websiteUrl,
@@ -113,8 +107,9 @@ export default function Home() {
     console.log('generateKeywords', apiPayload);    
 
     try {
-      const response = await axios.post(`http://localhost:8080/api/generate-content`, apiPayload)
+      const response = await axios.post(`${NEXT_PUBLIC_BASE_API_URL}/api/generate-content`, apiPayload)
       console.log('response', response)
+      setKeywords(response.data.keywords)
       setIsLoading(false);
       setCurrentStep(2);
     }catch(err) {
