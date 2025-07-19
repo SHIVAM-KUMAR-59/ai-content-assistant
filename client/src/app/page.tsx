@@ -58,10 +58,8 @@ export default function Home() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    console.log(name, value);
     // Only update if the key exists in FormData
     if (name in formData) {
-      console.log('updating form data');
       setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
@@ -103,12 +101,10 @@ export default function Home() {
       language: formData.language,
       contentTypes: formData.contentTypes,
       uploadedFile: formData.uploadedFile
-    }
-    console.log('generateKeywords', apiPayload);    
+    }  
 
     try {
-      const response = await axios.post(`${NEXT_PUBLIC_BASE_API_URL}/api/generate-content`, apiPayload)
-      console.log('response', response)
+      const response = await axios.post(`${NEXT_PUBLIC_BASE_API_URL}/api/generate-keyword`, apiPayload)
       setKeywords(response.data.keywords)
       setIsLoading(false);
       setCurrentStep(2);
@@ -122,20 +118,15 @@ export default function Home() {
   const generateTopics = async () => {
     setIsLoading(true);
     setLoadingMessage('Creating content topics based on your keywords...');
-    
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    const mockTopics: Topic[] = [
-      { id: '1', title: '10 Digital Marketing Trends for 2025', contentType: 'blog', keyword: 'digital marketing', score: 92 },
-      { id: '2', title: 'Why Your Content Strategy Needs a Refresh', contentType: 'blog', keyword: 'content strategy', score: 88 },
-      { id: '3', title: 'Quick SEO wins for small businesses', contentType: 'linkedin', keyword: 'SEO optimization', score: 85 },
-      { id: '4', title: 'Social media myths debunked 🧵', contentType: 'twitter', keyword: 'social media marketing', score: 90 },
-      { id: '5', title: 'Building brand awareness on a budget', contentType: 'instagram', keyword: 'brand awareness', score: 87 }
-    ];
-    
-    setTopics(mockTopics);
-    setIsLoading(false);
-    setCurrentStep(3);
+    try {
+      const response = await axios.post(`${NEXT_PUBLIC_BASE_API_URL}/api/generate-topic`, keywords)
+      setTopics(response.data.topics);
+      setCurrentStep(3);
+    }catch(err) {
+      console.log(err)
+    }finally {
+      setIsLoading(false);
+    }
   };
 
   const generateBlueprint = async (topic: Topic) => {

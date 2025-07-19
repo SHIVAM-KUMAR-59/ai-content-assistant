@@ -30,14 +30,7 @@ const handleGenerateContent = async (req: Request, res: Response) => {
   }
 
   try {
-    // const keywords = await extractKeywords(websiteUrl, competitorUrls);
-    // const keywordTopics = await Promise.all(
-    //   keywords.map(async (keyword) => {
-    //     const topics = await generateTopics(keyword.keyword, contentTypes, language);
-    //     return { ...keyword, topics };
-    //   })
-    // );
-    // res.json({ keywords: keywordTopics });
+
     const mockKeywords = [
       { id: '1', keyword: 'digital marketing', volume: 12000, difficulty: 65, score: 85 },
       { id: '2', keyword: 'content strategy', volume: 8500, difficulty: 45, score: 90 },
