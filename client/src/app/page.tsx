@@ -38,7 +38,7 @@ export default function Home() {
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
-  const NEXT_PUBLIC_BASE_API_URL="http://localhost:8080"
+  const apiUrl = process.env.NEXT_PUBLIC_BASE_API_URL
 
   const steps = [
     { id: 1, title: 'Business Info', icon: Target },
@@ -104,7 +104,7 @@ export default function Home() {
     }  
 
     try {
-      const response = await axios.post(`${NEXT_PUBLIC_BASE_API_URL}/api/generate-keyword`, apiPayload)
+      const response = await axios.post(`${apiUrl}/api/generate-keyword`, apiPayload)
       setKeywords(response.data.keywords)
       setIsLoading(false);
       setCurrentStep(2);
@@ -119,7 +119,7 @@ export default function Home() {
     setIsLoading(true);
     setLoadingMessage('Creating content topics based on your keywords...');
     try {
-      const response = await axios.post(`${NEXT_PUBLIC_BASE_API_URL}/api/generate-topic`, keywords)
+      const response = await axios.post(`${apiUrl}/api/generate-topic`, keywords)
       setTopics(response.data.topics);
       setCurrentStep(3);
     }catch(err) {
@@ -134,7 +134,7 @@ export default function Home() {
     setIsLoading(true);
     setLoadingMessage('Creating content blueprint...');
     try {
-      const response = await axios.post(`${NEXT_PUBLIC_BASE_API_URL}/api/generate-blueprint`, {
+      const response = await axios.post(`${apiUrl}/api/generate-blueprint`, {
         title: topic.title,
         contentType: topic.contentType,
       });
@@ -152,7 +152,7 @@ export default function Home() {
     setIsLoading(true);
     setLoadingMessage('Generating your content...');
     try {
-      const response = await axios.post(`${NEXT_PUBLIC_BASE_API_URL}/api/generate-content`, {
+      const response = await axios.post(`${apiUrl}/api/generate-content`, {
         title: blueprint.title,
         contentType: selectedTopic.contentType,
       });
