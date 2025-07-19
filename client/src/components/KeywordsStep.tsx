@@ -31,12 +31,10 @@ const KeywordsStep: React.FC<KeywordsStepProps> = ({ keywords, setCurrentStep, g
           </div>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-500">Monthly Volume:</span>
-              <span className="ml-2 font-medium">{keyword.volume.toLocaleString()}</span>
+              <span className="text-gray-500">Monthly Volume: {keyword.volume.toLocaleString()}</span>
             </div>
             <div>
-              <span className="text-gray-500">Difficulty:</span>
-              <span className="ml-2 font-medium">{keyword.difficulty}/100</span>
+              <span className="text-gray-500">Difficulty: {keyword.difficulty}/100</span>
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 const mockBlueprints = [
   {
     id: '1',
-    title: 'Digital Marketing Trends 2025',
+    title: '10 Digital Marketing Trends for 2025',
     outline: [
       'Introduction - Hook with current market statistics',
       'Main Point 1 - Trend analysis and impact',
@@ -14,34 +14,67 @@ const mockBlueprints = [
     estimatedWords: 800,
     targetKeywords: ['digital marketing', 'trends 2025', 'marketing strategy'],
     contentType: 'blog',
+    relatedContent: ['Digital Marketing Trends 2025 Blog Content']
   },
   {
     id: '2',
-    title: 'AI in Healthcare',
+    title: 'Why Your Content Strategy Needs a Refresh',
     outline: [
-      'Introduction - The rise of AI in healthcare',
-      'Benefits and challenges',
-      'Case studies',
-      'Future outlook',
-      'Conclusion'
-    ],
-    estimatedWords: 1000,
-    targetKeywords: ['AI', 'healthcare', 'technology'],
-    contentType: 'linkedin',
-  },
-  {
-    id: '3',
-    title: 'Sustainable Business Practices',
-    outline: [
-      'Introduction - Why sustainability matters',
-      'Key strategies',
-      'Examples from industry leaders',
-      'Measuring impact',
+      'Introduction - Why content strategies get outdated',
+      'Signs you need a refresh',
+      'Steps to update your strategy',
+      'Measuring success',
       'Conclusion'
     ],
     estimatedWords: 900,
-    targetKeywords: ['sustainability', 'business', 'green'],
+    targetKeywords: ['content strategy', 'refresh', 'content marketing'],
     contentType: 'blog',
+    relatedContent: ['Content Strategy Refresh Blog Content']
+  },
+  {
+    id: '3',
+    title: 'Quick SEO wins for small businesses',
+    outline: [
+      'Introduction - SEO for small businesses',
+      'Quick win #1',
+      'Quick win #2',
+      'Quick win #3',
+      'Conclusion'
+    ],
+    estimatedWords: 700,
+    targetKeywords: ['SEO', 'small business', 'quick wins'],
+    contentType: 'linkedin',
+    relatedContent: ['SEO Wins LinkedIn Content']
+  },
+  {
+    id: '4',
+    title: 'Social media myths debunked 🧵',
+    outline: [
+      'Introduction - Common myths',
+      'Myth #1',
+      'Myth #2',
+      'Myth #3',
+      'Conclusion'
+    ],
+    estimatedWords: 500,
+    targetKeywords: ['social media', 'myths', 'debunked'],
+    contentType: 'twitter',
+    relatedContent: ['Social Media Myths Twitter Content']
+  },
+  {
+    id: '5',
+    title: 'Building brand awareness on a budget',
+    outline: [
+      'Introduction - Why brand awareness matters',
+      'Low-cost strategies',
+      'Case studies',
+      'Measuring impact',
+      'Conclusion'
+    ],
+    estimatedWords: 600,
+    targetKeywords: ['brand awareness', 'budget', 'marketing'],
+    contentType: 'instagram',
+    relatedContent: ['Brand Awareness Instagram Content']
   },
 ];
 
@@ -52,9 +85,11 @@ export default function handleGenerateBlueprint(req: Request, res: Response) {
   }
   try {
     const blueprint = mockBlueprints.find(
-        (bp) => bp.title === title && bp.contentType === contentType
-      ) || mockBlueprints[0]; // fallback
-
+      (bp) => bp.title === title && bp.contentType === contentType
+    ) || null;
+    if (!blueprint) {
+      return res.status(404).json({message: "Blueprint not found", success: false})
+    }
     return res.status(200).json({message: "Blueprint generated successfully", success: true, blueprint: blueprint})
   }catch(err) {
     return res.status(500).json({message: "Internal server error", success: false})
