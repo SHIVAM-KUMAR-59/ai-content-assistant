@@ -133,54 +133,36 @@ export default function Home() {
     setSelectedTopic(topic);
     setIsLoading(true);
     setLoadingMessage('Creating content blueprint...');
-    
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    const mockBlueprint: ContentBlueprint = {
-      id: '1',
-      title: topic.title,
-      outline: [
-        'Introduction - Hook with current market statistics',
-        'Main Point 1 - Trend analysis and impact',
-        'Main Point 2 - Practical implementation strategies',
-        'Main Point 3 - Real-world case studies',
-        'Conclusion - Key takeaways and next steps'
-      ],
-      estimatedWords: 800,
-      targetKeywords: ['digital marketing', 'trends 2025', 'marketing strategy']
-    };
-    
-    setBlueprint(mockBlueprint);
-    setIsLoading(false);
-    setCurrentStep(4);
+    try {
+      const response = await axios.post(`${NEXT_PUBLIC_BASE_API_URL}/api/generate-blueprint`, {
+        title: topic.title,
+        contentType: topic.contentType,
+      });
+      setBlueprint(response.data.blueprint);
+      setCurrentStep(4);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const generateContent = async () => {
+    if (!blueprint || !selectedTopic) return;
     setIsLoading(true);
     setLoadingMessage('Generating your content...');
-    
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    const mockContent: GeneratedContent = {
-      id: '1',
-      title: blueprint!.title,
-      content: `The digital marketing landscape is evolving rapidly, and 2025 promises to bring unprecedented changes that will reshape how businesses connect with their audiences.
-
-As we navigate this transformation, understanding emerging trends becomes crucial for maintaining competitive advantage. From AI-powered personalization to immersive AR experiences, the tools and strategies that define success are becoming more sophisticated.
-
-Recent studies show that businesses adapting to these trends see 40% higher engagement rates and 25% better conversion rates. The key lies in identifying which trends align with your specific business goals and audience needs.
-
-Smart marketers are already preparing for voice search optimization, video-first content strategies, and privacy-focused marketing approaches. These aren't just buzzwords—they're the foundation of tomorrow's successful campaigns.
-
-Ready to future-proof your marketing strategy? Start by auditing your current approach and identifying gaps where these trends can make the biggest impact.`,
-      score: 89,
-      contentType: selectedTopic!.contentType,
-      wordCount: 156
-    };
-    
-    setGeneratedContent(mockContent);
-    setIsLoading(false);
-    setCurrentStep(5);
+    try {
+      const response = await axios.post(`${NEXT_PUBLIC_BASE_API_URL}/api/generate-content`, {
+        title: blueprint.title,
+        contentType: selectedTopic.contentType,
+      });
+      setGeneratedContent(response.data.content);
+      setCurrentStep(5);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
