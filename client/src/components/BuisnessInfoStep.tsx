@@ -40,7 +40,7 @@ const BusinessInfoStep: React.FC<BusinessInfoStepProps> = ({
   <div className="space-y-6">
     <div className="text-center mb-8">
       <h2 className="text-3xl font-bold text-gray-900 mb-2">Tell us about your business</h2>
-      <p className="text-gray-600">We'll use this information to create personalized content suggestions</p>
+      <p className="text-gray-600">We&apos;ll use this information to create personalized content suggestions</p>
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
