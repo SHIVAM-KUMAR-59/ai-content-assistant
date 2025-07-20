@@ -169,13 +169,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 md:px-12 lg:px-32">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-100 py-6 md:py-12 px-2 sm:px-4 md:px-12 lg:px-32">
+      <div className="max-w-full sm:max-w-2xl md:max-w-4xl mx-auto">
         <StepIndicator 
           steps={steps}
           currentStep={currentStep}
         />
-        <div className="bg-white p-8 rounded-2xl shadow-lg">
+        <div className="bg-white p-3 sm:p-6 md:p-8 rounded-2xl shadow-lg">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-24">
               <Loader2 className="w-12 h-12 animate-spin text-blue-600 mb-6" />

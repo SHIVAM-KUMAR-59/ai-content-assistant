@@ -53,11 +53,11 @@ const BusinessInfoStep: React.FC<BusinessInfoStepProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Tell us about your business</h2>
-        <p className="text-gray-600">We&apos;ll use this information to create personalized content suggestions</p>
+      <div className="text-center mb-6 md:mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Tell us about your business</h2>
+        <p className="text-gray-600 text-sm md:text-base">We&apos;ll use this information to create personalized content suggestions</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Business Name *</label>
           <input
@@ -114,7 +114,7 @@ const BusinessInfoStep: React.FC<BusinessInfoStepProps> = ({
           </div>
         )}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
           <select
@@ -178,7 +178,7 @@ const BusinessInfoStep: React.FC<BusinessInfoStepProps> = ({
       </div>
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-3">Content Types *</label>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-3">
           {(['blog', 'linkedin', 'twitter', 'instagram'] as ContentType[]).map((type) => {
             const Icon = contentTypeIcons[type as ContentType];
             return (
@@ -198,11 +198,11 @@ const BusinessInfoStep: React.FC<BusinessInfoStepProps> = ({
           })}
         </div>
       </div>
-      <div className="flex justify-end">
+      <div className="flex flex-col md:flex-row justify-end gap-2 md:gap-0">
         <button
           onClick={generateKeywords}
           disabled={!formData.businessName || formData.contentTypes.length === 0}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+          className="w-full md:w-auto px-4 md:px-6 py-2 md:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
         >
           Generate Keywords
           <ChevronRight className="w-4 h-4" />

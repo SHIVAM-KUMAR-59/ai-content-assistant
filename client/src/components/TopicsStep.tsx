@@ -20,17 +20,17 @@ interface TopicsStepProps {
 
 const TopicsStep: React.FC<TopicsStepProps> = ({ topics, setCurrentStep, generateBlueprint, contentTypeIcons }) => (
   <div className="space-y-6">
-    <div className="text-center mb-8">
-      <h2 className="text-3xl font-bold text-gray-900 mb-2">Content Topics</h2>
-      <p className="text-gray-600">Select a topic to create your content blueprint</p>
+    <div className="text-center mb-6 md:mb-8">
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Content Topics</h2>
+      <p className="text-gray-600 text-sm md:text-base">Select a topic to create your content blueprint</p>
     </div>
-    <div className="grid gap-4">
+    <div className="grid gap-3 md:gap-4">
       {topics.map((topic) => {
         const Icon = contentTypeIcons[topic.contentType];
         return (
-          <div key={topic.id} className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
+          <div key={topic.id} className="bg-white p-4 md:p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow cursor-pointer"
                onClick={() => generateBlueprint(topic)}>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2 sm:gap-0">
               <div className="flex items-center gap-3">
                 <Icon className="w-5 h-5 text-blue-600" />
                 <h3 className="text-lg font-semibold text-gray-900">{topic.title}</h3>
@@ -51,7 +51,7 @@ const TopicsStep: React.FC<TopicsStepProps> = ({ topics, setCurrentStep, generat
             <div className="text-sm text-gray-600">
               <span className="font-medium">Target Keyword:</span> {topic.keyword}
             </div>
-            <div className="mt-4 flex justify-end">
+            <div className="mt-3 sm:mt-4 flex justify-end">
               <button className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center gap-1">
                 Create Blueprint
                 <ChevronRight className="w-4 h-4" />
@@ -61,10 +61,10 @@ const TopicsStep: React.FC<TopicsStepProps> = ({ topics, setCurrentStep, generat
         );
       })}
     </div>
-    <div className="flex justify-between">
+    <div className="flex flex-col md:flex-row justify-between gap-2 md:gap-0">
       <button
         onClick={() => setCurrentStep(2)}
-        className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+        className="w-full md:w-auto px-4 md:px-6 py-2 md:py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base"
       >
         Back
       </button>
