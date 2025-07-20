@@ -11,6 +11,7 @@ app.use(cors())
 app.use(express.json())
 app.use(router)
 
+// This endpoint is polled by the frontend every 14 minutes to keep the server awake
 app.get('/v1/api/health', (req: Request, res: Response) => {
   console.log('API is healthy and working')
   res.sendStatus(200)

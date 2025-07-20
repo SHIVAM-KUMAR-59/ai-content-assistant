@@ -168,6 +168,17 @@ export default function Home() {
     }
   };
 
+  // Poll health endpoint every 14 minutes
+  React.useEffect(() => {
+    const pollHealth = () => {
+      if (!apiUrl) return;
+      axios.get(`${apiUrl}/v1/api/health`).catch(() => {});
+    };
+    pollHealth(); // initial call
+    const interval = setInterval(pollHealth, 14 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [apiUrl]);
+
   return (
     <div className="min-h-screen bg-gray-100 py-6 md:py-12 px-2 sm:px-4 md:px-12 lg:px-32">
       <div className="max-w-full sm:max-w-2xl md:max-w-4xl mx-auto">
