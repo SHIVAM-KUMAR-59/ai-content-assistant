@@ -105,7 +105,7 @@ export default function Home() {
     }
 
     try {
-      const response = await axios.post(`${apiUrl}/api/generate-keyword`, form, {
+      const response = await axios.post(`${apiUrl}/v1/api/generate-keyword`, form, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setKeywords(response.data.keywords)
@@ -122,7 +122,7 @@ export default function Home() {
     setIsLoading(true);
     setLoadingMessage('Creating content topics based on your keywords...');
     try {
-      const response = await axios.post(`${apiUrl}/api/generate-topic`, keywords)
+      const response = await axios.post(`${apiUrl}/v1/api/generate-topic`, keywords)
       setTopics(response.data.topics);
       setCurrentStep(3);
     }catch(err) {
@@ -137,7 +137,7 @@ export default function Home() {
     setIsLoading(true);
     setLoadingMessage('Creating content blueprint...');
     try {
-      const response = await axios.post(`${apiUrl}/api/generate-blueprint`, {
+      const response = await axios.post(`${apiUrl}/v1/api/generate-blueprint`, {
         title: topic.title,
         contentType: topic.contentType,
       });
@@ -155,7 +155,7 @@ export default function Home() {
     setIsLoading(true);
     setLoadingMessage('Generating your content...');
     try {
-      const response = await axios.post(`${apiUrl}/api/generate-content`, {
+      const response = await axios.post(`${apiUrl}/v1/api/generate-content`, {
         title: blueprint.title,
         contentType: selectedTopic.contentType,
       });
