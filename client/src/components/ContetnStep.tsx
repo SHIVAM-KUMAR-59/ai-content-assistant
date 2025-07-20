@@ -1,5 +1,5 @@
-import React from 'react';
-import { Edit3, Download, Eye, BarChart3 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Edit3, Download, Eye, BarChart3, ChevronDown } from 'lucide-react';
 
 type GeneratedContent = {
   id: string;
@@ -15,13 +15,49 @@ interface ContentStepProps {
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const ContentStep: React.FC<ContentStepProps> = ({ generatedContent, setCurrentStep }) => (
-  <div className="space-y-6">
-    <div className="text-center mb-6 md:mb-8">
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Generated Content</h2>
-      <p className="text-gray-600 text-sm md:text-base">Your AI-generated content is ready for review</p>
-    </div>
-    {generatedContent && (
+const ContentStep: React.FC<ContentStepProps> = ({ generatedContent, setCurrentStep }) => {
+  const [showDownloadMenu, setShowDownloadMenu] = useState(false);
+
+  if (!generatedContent) return null;
+
+  const handleDownload = (format: 'pdf' | 'csv') => {
+    if (format === 'csv') {
+     
+      const csv = `Title,Content,Score,ContentType,WordCount\n"${generatedContent.title.replace(/"/g, '""')}","${generatedContent.content.replace(/"/g, '""')}",${generatedContent.score},${generatedContent.contentType},${generatedContent.wordCount}`;
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${generatedContent.title || 'content'}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } else if (format === 'pdf') {
+      
+      const win = window.open('', '_blank');
+      if (win) {
+        win.document.write(`
+          <html><head><title>${generatedContent.title}</title></head><body>
+          <h2>${generatedContent.title}</h2>
+          <pre style="white-space: pre-wrap; font-family: inherit;">${generatedContent.content}</pre>
+          <hr/>
+          <div>Score: ${generatedContent.score} | Type: ${generatedContent.contentType} | Words: ${generatedContent.wordCount}</div>
+          </body></html>
+        `);
+        win.document.close();
+        win.print();
+      }
+    }
+    setShowDownloadMenu(false);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="text-center mb-6 md:mb-8">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Generated Content</h2>
+        <p className="text-gray-600 text-sm md:text-base">Your AI-generated content is ready for review</p>
+      </div>
       <div className="bg-white p-4 md:p-6 rounded-lg border border-gray-200">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-2 md:gap-0">
           <h3 className="text-lg md:text-xl font-semibold text-gray-900">{generatedContent.title}</h3>
@@ -58,15 +94,23 @@ const ContentStep: React.FC<ContentStepProps> = ({ generatedContent, setCurrentS
           </div>
         </div>
         <div className="flex flex-col md:flex-row gap-2 md:gap-3">
-          <button className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 text-sm md:text-base">
-            <Edit3 className="w-4 h-4" />
-            Edit Content
-          </button>
-          <button className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base">
+          <button
+            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
+            onClick={() => handleDownload('pdf')}
+            type="button"
+          >
             <Download className="w-4 h-4" />
-            Download
+            Download PDF
           </button>
-          <button className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
+          <button
+            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base cursor-pointer"
+            onClick={() => handleDownload('csv')}
+            type="button"
+          >
+            <Download className="w-4 h-4" />
+            Download CSV
+          </button>
+          <button className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base cursor-pointer"
             onClick={() => setCurrentStep(6)}
           >
             <Eye className="w-4 h-4" />
@@ -74,23 +118,23 @@ const ContentStep: React.FC<ContentStepProps> = ({ generatedContent, setCurrentS
           </button>
         </div>
       </div>
-    )}
-    <div className="flex flex-col md:flex-row justify-between gap-2 md:gap-0">
-      <button
-        onClick={() => setCurrentStep(4)}
-        className="w-full md:w-auto px-4 md:px-6 py-2 md:py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base"
-      >
-        Back
-      </button>
-      <button
-        onClick={() => setCurrentStep(6)}
-        className="w-full md:w-auto px-4 md:px-6 py-2 md:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
-      >
-        View Detailed Score
-        <BarChart3 className="w-4 h-4" />
-      </button>
+      <div className="flex flex-col md:flex-row justify-between gap-2 md:gap-0">
+        <button
+          onClick={() => setCurrentStep(4)}
+          className="w-full md:w-auto px-4 md:px-6 py-2 md:py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base cursor-pointer"
+        >
+          Back
+        </button>
+        <button
+          onClick={() => setCurrentStep(6)}
+          className="w-full md:w-auto px-4 md:px-6 py-2 md:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm md:text-base cursor-pointer"
+        >
+          View Detailed Score
+          <BarChart3 className="w-4 h-4" />
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default ContentStep;
