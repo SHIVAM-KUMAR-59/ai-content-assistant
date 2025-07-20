@@ -4,6 +4,7 @@ export interface ContentRequest {
   competitorUrls: string[]
   language: string
   contentTypes: string[]
+  uploadedFile?: any // File object, handled by multer
 }
 
 export interface Keyword {

@@ -17,7 +17,7 @@ import TopicsStep from '../components/TopicsStep';
 import BlueprintStep from '../components/BluePrintStep';
 import ContentStep from '../components/ContetnStep';
 import ScoreStep from '../components/ScoreStep';
-import { ContentBlueprint, ContentType, FormData, GeneratedContent, Keyword, Topic } from '@/types/types';
+import type { ContentBlueprint, ContentType, FormData, GeneratedContent, Keyword, Topic } from '@/types/types';
 import axios from 'axios';
 
 export default function Home() {
@@ -94,17 +94,20 @@ export default function Home() {
     setIsLoading(true);
     setLoadingMessage('Analyzing your business and competitors...');
     
-    const apiPayload = {
-      businessName: formData.businessName,
-      websiteUrl: formData.websiteUrl,
-      competitorUrls: formData.competitorUrls,
-      language: formData.language,
-      contentTypes: formData.contentTypes,
-      uploadedFile: formData.uploadedFile
-    }  
+    const form = new FormData();
+    form.append('businessName', formData.businessName);
+    form.append('websiteUrl', formData.websiteUrl);
+    form.append('language', formData.language);
+    formData.competitorUrls.forEach((url, idx) => form.append(`competitorUrls[${idx}]`, url));
+    formData.contentTypes.forEach((type, idx) => form.append(`contentTypes[${idx}]`, type));
+    if (formData.uploadedFile) {
+      form.append('uploadedFile', formData.uploadedFile);
+    }
 
     try {
-      const response = await axios.post(`${apiUrl}/api/generate-keyword`, apiPayload)
+      const response = await axios.post(`${apiUrl}/api/generate-keyword`, form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       setKeywords(response.data.keywords)
       setIsLoading(false);
       setCurrentStep(2);
