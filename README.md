@@ -1,3 +1,5 @@
+![AI Content Assistant Screenshot](./screenshot.png)
+
 # 🤖 AI Content Assistant
 
 A comprehensive AI-powered content generation platform that helps businesses create engaging content through a step-by-step guided process. From keyword analysis to final content generation, this tool streamlines the content creation workflow.
